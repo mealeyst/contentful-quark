@@ -2,12 +2,5 @@
   "name": "Contentful Quark",
   "id": "contentful-quark",
   "fieldTypes": ["Object"],
-  "srcdoc": "./index.html",
-  "parameters": {
-    "instance": {
-      "id": "apiEndpoint",
-      "name": "Quark API endpoint",
-      "type": "Symbol"
-    }
-  }
+  "srcdoc": "./index.html"
 }
