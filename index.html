@@ -7,25 +7,157 @@
     <link rel="stylesheet" href="https://contentful.github.io/ui-extensions-sdk/cf-extension.css">
     <!-- load Contentful extensions SDK -->
     <script src="https://unpkg.com/contentful-ui-extensions-sdk@3"></script>
+    <style>
+    .box {
+      height: 100px;
+      width: 100px;
+      position: relative;
+      top: 5px;
+      left: 5px;
+      cursor: pointer;
+      border-radius: 2px;
+      box-shadow: 1px 1px 3px;
+      }
+
+      #unique-id1 {
+      background-color: red;
+      }
+
+      #unique-id2 {
+      background-color: green;
+      }
+
+      #unique-id3 {
+      background-color: blue;
+      }
+
+      .held {
+      border: solid 10px black;
+      background-color: black;
+      }
+
+      .holder {
+      height: 120px;
+      width: 110px;
+      margin: 10px;
+      display: flex;
+      flex: 1 1 100%;
+      }
+
+      .hovered {
+      border: dotted 5px black;
+      }
+
+      .invisible {
+      display: none;
+      }
+
+      #container {
+      display: flex;
+      flex-wrap: wrap;
+      }
+
+      section[role="product-stage"]{
+      flex: 3 3 100%;
+      display: flex;
+      flex-wrap: wrap;
+      background-color: #F3F3F3;
+      border-radius: 2px;
+      }
+
+      footer[role="product-glossary"] {
+      display: flex;
+      background-color: #F3F3F3;
+      border-radius: 2px;
+      }
+
+      section[role="product-stage"] > *, footer[role="product-glossary"] > * {
+      margin: 5px;
+      }
+
+      label {
+      margin-left: 10px;
+      margin-right: 10px;
+      }
+    </style>
   </head>
   <body>
-    <div id="content">
-      <input id="product-name" type="text" />
-    </div>
+    <main role="content">
+      <div id="container">
+         <label>Place your products here:</label>
+         <section role="product-stage" class="holder">
+         </section>
+
+        <label>Select products from here:</label>
+         <footer role="product-glossary" class="holder">
+           <div class="box" id="unique-id1" draggable="true"></div>
+           <div class="box" id="unique-id2" draggable="true"></div>
+           <div class="box"  id="unique-id3" draggable="true"></div>
+         </footer>
+      </div>
+    </main>
 
     <script type="text/javascript">
       // initialize the contentful extension
       // using the UI extensions SDK
-      window.contentfulExtension.init( extension => {
-        const input = document.getElementById('product-name');
-        const value = extension.field.getValue();
-        input.value = value;
+      class App {
 
-        //send changes to Contentful web app
-        input.addEventListener('change', event => {
-          extension.field.setValue( event.target.value );
-        });
-      });
+        static init() {
+
+          App.boxes = document.getElementsByClassName('box')
+          Array.prototype.forEach.call(App.boxes, (box) => {
+            box.addEventListener("dragstart", App.dragstart)
+          })
+
+          Array.prototype.forEach.call(App.boxes,  (box) => {
+            box.addEventListener("dragend", App.dragend)
+          })
+
+          const containers = document.getElementsByClassName('holder')
+
+          for(const container of containers) {
+            container.addEventListener("dragover", App.dragover)
+            container.addEventListener("dragenter", App.dragenter)
+            container.addEventListener("dragleave", App.dragleave)
+            container.addEventListener("drop", App.drop)
+          }
+        }
+
+        static dragstart(e) {
+          this.className += " held"
+          e.dataTransfer.setData("text/plain", e.target.id);
+
+          setTimeout(()=>this.className="invisible", 0)
+        }
+
+        static dragend() {
+          this.className = "box"
+        }
+
+        static dragover(e) {
+          e.preventDefault()
+        }
+
+        static dragenter(e) {
+          e.preventDefault()
+          this.className += " hovered"
+        }
+
+        static dragleave() {
+          this.className = "holder"
+        }
+
+        static drop(e) {
+          this.className = "holder"
+          var data = e.dataTransfer.getData("text/plain");
+          if (e.target.className !== 'box') {
+            e.target.appendChild(document.getElementById(data));
+          }
+        }
+
+      }
+
+      document.addEventListener("DOMContentLoaded", App.init)
     </script>
   </body>
 </html>
