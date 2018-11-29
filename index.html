@@ -158,6 +158,11 @@
       }
 
       document.addEventListener("DOMContentLoaded", App.init)
+      // initialize the Contentful extension
+      // using the UI extensions SDK
+      window.contentfulExtension.init(extension => {
+        let value = extension.field.getValue();
+      }
     </script>
   </body>
 </html>
