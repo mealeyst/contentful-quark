@@ -1,0 +1,14 @@
+{
+  "name": "contentful-quark",
+  "version": "1.0.0",
+  "description": "A Contentful UI extension to select products from Quark",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "contentful"
+  ],
+  "author": "Shawn Mealey",
+  "license": "ISC"
+}

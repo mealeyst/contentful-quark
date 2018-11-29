@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>UI-Extension Country Select</title>
+    <!-- load Contentful stylesheet to have some base styles -->
+    <link rel="stylesheet" href="https://contentful.github.io/ui-extensions-sdk/cf-extension.css">
+    <!-- load Contentful extensions SDK -->
+    <script src="https://unpkg.com/contentful-ui-extensions-sdk@3"></script>
+  </head>
+  <body>
+    <div id="content">
+      <input id="product-name" type="text" />
+    </div>
+
+    <script type="text/javascript">
+      // initialize the contentful extension
+      // using the UI extensions SDK
+      window.contentfulExtension.init( extension => {
+        const input = document.getElementById('product-name');
+        const value = extension.field.getValue();
+        input.value = value;
+
+        //send changes to Contentful web app
+        input.addEventListener('change', event => {
+          extension.field.setValue( event.target.value );
+        });
+      });
+    </script>
+  </body>
+</html>
